@@ -82,7 +82,7 @@ for feature_file, label_file in zip(feature_files, label_files):
     features_list.append(feature)
     labels_list.append(label)
 
-features = np.concatenate(features_list, axis=0)
+features = np.stack(features_list, axis=0)
 labels = np.concatenate(labels_list, axis=0)
 
 np.save('final_features.npy', features)
