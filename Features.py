@@ -8,20 +8,16 @@ def extract_features(audio_file, n_mfcc=20, max_frames=500):
     audio, sr = librosa.load(audio_file)
     mfcc = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=n_mfcc)
     if mfcc.shape[1] < max_frames:
-        # Pad with zeros if there are fewer frames
         padding = np.zeros((n_mfcc, max_frames - mfcc.shape[1]))
         mfcc = np.hstack((mfcc, padding))
     elif mfcc.shape[1] > max_frames:
-        # Trim if there are more frames
         mfcc = mfcc[:, :max_frames]
     return mfcc
 
 
-# Get the directory of the current script
 script_dir = os.path.dirname(os.path.abspath(__file__))
 processed_data_dir = os.path.join(script_dir, 'ProcessedData')
 
-# Create the directory if it doesn't exist
 if not os.path.exists(processed_data_dir):
     os.makedirs(processed_data_dir)
 
@@ -42,7 +38,6 @@ language_to_label = {
 total_files = sum(len(files) for _, _, files in os.walk(data_dir))
 processed_files = 0
 
-# Initialize counters for file numbering
 file_counter = 0
 
 for language_folder, label in language_to_label.items():
@@ -51,7 +46,6 @@ for language_folder, label in language_to_label.items():
         audio_path = os.path.join(language_dir, audio_file)
         feature = extract_features(audio_path)
 
-        # Save each feature and label to separate files
         feature_file = os.path.join(processed_data_dir, f'feature_{file_counter}.npy')
         label_file = os.path.join(processed_data_dir, f'label_{file_counter}.npy')
 
